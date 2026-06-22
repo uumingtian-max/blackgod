@@ -1,130 +1,90 @@
-# 🤖 Black-God AI v2.0 - 满分级 iOS App
+# Black God - AI Agent Platform
 
-**完全原创 · 满分级质量 · 全能 AI 助手**
-
----
-
-## ✨ v2.0 新特性
-
-### 🎨 界面设计（100/100）
-- ✅ **炫酷渐变背景** - 紫蓝黑三色动态渐变
-- ✅ **现代化气泡** - 圆角、阴影、头像
-- ✅ **流畅动画** - Spring 弹簧动画
-- ✅ **毛玻璃效果** - 输入栏毛玻璃
-- ✅ **自定义 Loading** - 3D 点动画
-
-### ⚡ 功能增强（100/100）
-- ✅ **图片显示** - 生成的图片直接查看
-- ✅ **错误处理** - 详细错误提示 + 解决方案
-- ✅ **设置页面** - 完整的设置界面
-  - API 地址配置
-  - 数据管理
-  - 关于信息
-- ✅ **复制/分享** - 长按消息复制/分享
-- ✅ **导出对话** - 一键导出完整对话
-- ✅ **语音输入** - 语音输入按钮（待实现）
-- ✅ **多行输入** - 自动扩展输入框
-
-### 🔧 技术优化（100/100）
-- ✅ **流式响应** - 真正的流式 API 调用
-- ✅ **async/await** - 现代异步处理
-- ✅ **MVVM 架构** - 清晰的代码结构
-- ✅ **UserDefaults** - 设置持久化
-- ✅ **上下文菜单** - 原生长按菜单
-- ✅ **触觉反馈** - Haptic Feedback
+**Open-source AI assistant platform with 14 tools, autonomous agent system, and multi-client support.**
 
 ---
 
-## 🎯 质量对比
+## Features
 
-| 维度 | v1.0 | v2.0 | ChatGPT | Minis |
-|---|---|---|---|---|
-| 界面美观 | 7/10 | **10/10** ✨ | 9/10 | 9/10 |
-| 交互流畅 | 8/10 | **10/10** ✨ | 9/10 | 9/10 |
-| 功能丰富 | 7/10 | **10/10** ✨ | 8/10 | 10/10 |
-| 动画效果 | 6/10 | **10/10** ✨ | 8/10 | 9/10 |
-| 错误处理 | 3/10 | **10/10** ✨ | 9/10 | 8/10 |
-| **总分** | **36/50** | **50/50** 🏆 | 43/50 | 45/50 |
+### Core Engine
+- 14 built-in tools (Shell, Python, File I/O, Search, Image Generation, Browser, SQL, Git, Memory, APK Store)
+- Autonomous agent loop with multi-step task execution
+- OpenAI-compatible API (`/v1/chat/completions`, `/v1/models`)
+- Anthropic-compatible API (`/v1/messages`)
+- Model routing with upstream fallback
+- Skill system (77+ skills)
 
-**Black-God v2.0 = 满分级 App！**
-
----
-
-## 📱 功能清单
-
-### 核心功能
-- 💬 **智能对话** - 流式响应，实时交互
-- 🔍 **网页搜索** - 实时信息查询
-- 🎨 **图片生成** - AI 作画，直接显示
-- 📱 **APK 下载** - 应用商城
-- 🌐 **浏览器操作** - 自动化网页
-- 💾 **数据库查询** - SQL 执行
-- 📝 **记忆系统** - 跨会话记忆
-- 💻 **代码执行** - Python/Shell
-- 🐳 **Docker 操作** - 容器管理
-
-### 界面功能
-- ⚙️ **完整设置** - API 配置、数据管理
-- 📤 **导出对话** - 一键分享
-- 📋 **复制消息** - 长按复制
-- 🎤 **语音输入** - 快捷输入
-- 🌙 **暗色主题** - 护眼模式
+### Clients
+- PWA web client (iOS / Android / Desktop)
+- Telegram Bot
+- iOS native app (SwiftUI, in development)
+- Minis Provider integration
 
 ---
 
-## 🏗️ 技术栈
+## Quick Start
 
-- **语言**: Swift 5.0
-- **框架**: SwiftUI
-- **架构**: MVVM
-- **网络**: URLSession + async/await
-- **持久化**: UserDefaults
-- **最低版本**: iOS 15.0
+```bash
+# Clone
+git clone https://github.com/uumingtian-max/blackgod.git
 
----
+# Server setup (requires Python 3.10+)
+cd blackgod
+pip install fastapi uvicorn httpx
+python3 blackgod.py
+```
 
-## 🚀 安装
-
-1. 下载 IPA 文件
-2. 使用 AltStore 或 TestFlight 安装
-3. 启动 App，享受满分体验
+Server runs on `http://localhost:8082`.
 
 ---
 
-## 📊 服务器
+## API
 
-- **地址**: http://8.222.169.202
-- **工具**: 14 个
-- **状态**: 24/7 运行
-- **限制**: 零审查
-- **费用**: 完全免费
+### Health Check
+```bash
+curl http://localhost:8082/health
+# {"status":"ok","version":"6.0-blackgod"}
+```
 
----
+### Chat Completion
+```bash
+curl http://localhost:8082/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"claude-opus-4-8","messages":[{"role":"user","content":"Hello"}],"max_tokens":100}'
+```
 
-## 🎖️ 特色
-
-- ✅ **100 分质量** - 满分级 UI/UX
-- ✅ **完全无限制** - 零审查
-- ✅ **完全免费** - 无订阅
-- ✅ **完全原创** - 自主设计
-- ✅ **流畅体验** - 60fps 动画
-
----
-
-## 📝 更新日志
-
-### v2.0 (2026-06-21)
-- 🎨 全新界面设计（满分级）
-- ⚡ 功能全面增强
-- 🔧 技术全面优化
-- 🏆 达到 100/100 满分
-
-### v1.0 (2026-06-21)
-- 🚀 初始版本发布
+### List Models
+```bash
+curl http://localhost:8082/v1/models
+```
 
 ---
 
-**© 2026 Black-God Team**  
-**完全原创 · 完全免费 · 完全无限制**
+## Project Status
 
-🏆 **满分级 AI 助手，现已发布！**
+| Module | Status |
+|---|---|
+| Backend Core | ✅ Stable |
+| PWA Client | ✅ Online |
+| Telegram Bot | ✅ Online |
+| iOS App | 🚧 In Development |
+| Android App | 📋 Planned |
+
+---
+
+## Tech Stack
+
+- **Backend**: Python 3.10+ / FastAPI / Uvicorn
+- **iOS**: Swift 5.0 / SwiftUI / MVVM
+- **PWA**: HTML5 / CSS3 / Vanilla JS
+- **Deploy**: systemd / Nginx / Cloudflare Tunnel
+
+---
+
+## License
+
+MIT License
+
+---
+
+© 2026 Black God Team
