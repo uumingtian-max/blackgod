@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- SEO / 分享卡片 -->
+  <title>Black God - 不是聊天，是帮你把事做完</title>
+  <meta name="description" content="Black God 是 AI Agent 自动化工作台，支持任务规划、工具调用、技能执行、长期记忆和任务中心。不是聊天，是帮你把事做完。" />
+  <meta name="keywords" content="AI助手,智能助理,任务管理,效率工具,Agent,Black God" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Black God - 不是聊天，是帮你把事做完" />
+  <meta property="og:description" content="懂你生活工作的智能助理，会规划、会执行、会记忆、会复盘。" />
+  <meta property="og:image" content="/icon-512.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0A0A0F" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="icon" type="image/png" href="/icon-192.png" />
+
+  <link rel="stylesheet" href="/theme.css" />
+  <style>
+    .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 22px 0 110px; }
+
+    /* 顶部导航 */
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 56px; }
+    .brand { font-weight: 800; letter-spacing: .04em; font-size: 20px; color: var(--gold-light); }
+    .nav-links a { color: var(--text-sub); text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* 主视觉 */
+    .hero { text-align: center; max-width: 880px; margin: 0 auto; }
+    .logo-mark {
+      width: 132px; height: 132px; margin: 0 auto 26px; border-radius: 30px;
+      border: 1px solid var(--border-soft); overflow: hidden; object-fit: cover;
+      box-shadow: 0 0 46px var(--glow-gold); background: #050507;
+    }
+    .subtitle { margin: 18px auto 32px; color: var(--text-sub); font-size: 17px; line-height: 1.8; max-width: 640px; }
+
+    /* 输入区 */
+    .input-box {
+      display: flex; gap: 10px; align-items: center;
+      background: rgba(22,22,31,.9); border: 1px solid var(--border-soft);
+      border-radius: 22px; padding: 10px; box-shadow: 0 18px 60px rgba(0,0,0,.34);
+    }
+    .input-box input {
+      flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+      color: #fff; padding: 0 14px; font-size: 16px;
+    }
+    .input-box input::placeholder { color: var(--text-muted); }
+    .input-box button {
+      border: none; border-radius: 16px; padding: 14px 24px; white-space: nowrap;
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-light));
+      color: #0A0A0F; font-weight: 800; cursor: pointer;
+    }
+    .input-box button:disabled { opacity: .55; cursor: default; }
+
+    /* 执行结果面板 */
+    .result { margin-top: 18px; text-align: left; display: none; }
+    .result .card { white-space: pre-wrap; line-height: 1.7; color: var(--text-sub); }
+
+    /* 区块标题 */
+    .section-title { display: flex; align-items: baseline; justify-content: space-between; margin: 44px 4px 14px; }
+    .section-title h2 { font-size: 18px; margin: 0; color: var(--text-main); }
+    .section-title a { color: var(--gold-main); text-decoration: none; font-size: 14px; }
+
+    /* 6 大能力 */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .cap { text-align: left; cursor: pointer; }
+    .cap strong { display: block; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
+    .cap span { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+    .cap .emoji { font-size: 22px; }
+
+    /* 最近任务 */
+    .tasks { display: grid; gap: 10px; }
+    .task-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .task-row .t-title { color: var(--text-main); font-size: 15px; }
+    .task-row .t-meta { color: var(--text-muted); font-size: 13px; }
+    .badge { font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-soft); color: var(--text-sub); }
+    .badge.ok { color: var(--success); border-color: rgba(52,199,89,.4); }
+    .badge.run { color: var(--warning); border-color: rgba(255,176,32,.4); }
+    .badge.fail { color: var(--danger); border-color: rgba(255,77,79,.4); }
+    .empty { color: var(--text-muted); font-size: 14px; padding: 6px 2px; }
+
+    /* 底部 TabBar（移动端） */
+    .tabbar .tabbar-item { flex-direction: column; gap: 3px; text-decoration: none; }
+    .tabbar .tabbar-item .ic { font-size: 18px; }
+    @media (min-width: 721px) { .tabbar { display: none; } }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .input-box { flex-direction: column; align-items: stretch; }
+      .input-box input { padding: 14px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="bg-page">
+  <main class="page">
+    <!-- 顶部 -->
+    <nav class="nav">
+      <div class="brand">Black God</div>
+      <div class="nav-links">
+        <a href="/agent">Agent</a>
+        <a href="/tasks">任务</a>
+        <a href="/skills">技能</a>
+        <a href="/admin">控制台</a>
+      </div>
+    </nav>
+
+    <!-- 主视觉 -->
+    <section class="hero">
+      <img class="logo-mark" src="/logo.png" alt="Black God 神" />
+      <h1 class="hero-title"><span class="gold-text">不是聊天，</span><br/>是帮你把事做完</h1>
+      <p class="subtitle">懂你生活工作的智能助理，会规划、会执行、会记忆、会复盘。</p>
+
+      <form class="input-box" id="taskForm">
+        <input id="taskInput" autocomplete="off" placeholder="告诉我你想做什么..." />
+        <button type="submit" id="runBtn">开始执行</button>
+      </form>
+
+      <div class="result" id="result"><div class="card" id="resultBody"></div></div>
+    </section>
+
+    <!-- 6 大能力 -->
+    <div class="section-title"><h2>六大能力</h2><a href="/skills">技能市场 →</a></div>
+    <section class="grid" id="caps"></section>
+
+    <!-- 最近任务 -->
+    <div class="section-title"><h2>最近任务</h2><a href="/tasks">查看全部 →</a></div>
+    <section class="card"><div class="tasks" id="tasks"><div class="empty">加载中…</div></div></section>
+  </main>
+
+  <!-- 底部导航（移动端） -->
+  <nav class="tabbar">
+    <a class="tabbar-item active" href="/"><span class="ic">🏠</span>首页</a>
+    <a class="tabbar-item" href="/skills"><span class="ic">🧩</span>技能</a>
+    <a class="tabbar-item" href="/tasks"><span class="ic">📋</span>任务</a>
+    <a class="tabbar-item" href="/settings"><span class="ic">👤</span>我的</a>
+  </nav>
+
+  <script>
+    // 六大能力（前端默认不展示高风险/内部技能）
+    const CAPS = [
+      { emoji: "💬", name: "智能对话", desc: "复杂问题、长文理解、多模型协作。", cat: "智能对话" },
+      { emoji: "🎨", name: "创作设计", desc: "图标、页面、文案、品牌视觉。", cat: "创作设计" },
+      { emoji: "🔍", name: "信息获取", desc: "搜索、整理、对比、生成报告。", cat: "信息获取" },
+      { emoji: "💻", name: "开发工程", desc: "代码、部署、测试、故障排查。", cat: "开发工程" },
+      { emoji: "📊", name: "数据分析", desc: "表格、财务、图表、趋势判断。", cat: "数据分析" },
+      { emoji: "🛡️", name: "安全与恢复", desc: "授权检查、加固建议、风险提示。", cat: "安全与恢复" },
+    ];
+    const capsEl = document.getElementById("caps");
+    capsEl.innerHTML = CAPS.map(c => `
+      <div class="card card-hover cap" onclick="location.href='/skills?cat=${encodeURIComponent(c.cat)}'">
+        <div class="emoji">${c.emoji}</div>
+        <strong>${c.name}</strong>
+        <span>${c.desc}</span>
+      </div>`).join("");
+
+    // 提交任务 → 调用后端 /api/chat
+    const form = document.getElementById("taskForm");
+    const input = document.getElementById("taskInput");
+    const btn = document.getElementById("runBtn");
+    const result = document.getElementById("result");
+    const resultBody = document.getElementById("resultBody");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = input.value.trim();
+      if (!msg) return;
+      btn.disabled = true; btn.textContent = "执行中…";
+      result.style.display = "block";
+      resultBody.textContent = "正在规划与执行…";
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg, history: [] }),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        resultBody.textContent = data.answer || data.reply || JSON.stringify(data, null, 2);
+        loadTasks();
+      } catch (err) {
+        resultBody.textContent = "⚠️ 暂时连不上服务，请稍后再试。\n(" + err.message + ")";
+      } finally {
+        btn.disabled = false; btn.textContent = "开始执行";
+      }
+    });
+
+    // 最近任务
+    const tasksEl = document.getElementById("tasks");
+    function badge(status) {
+      const s = (status || "").toLowerCase();
+      if (s.includes("complete") || s.includes("success")) return '<span class="badge ok">已完成</span>';
+      if (s.includes("fail") || s.includes("error")) return '<span class="badge fail">失败</span>';
+      if (s.includes("run") || s.includes("plan")) return '<span class="badge run">进行中</span>';
+      return `<span class="badge">${status || "—"}</span>`;
+    }
+    async function loadTasks() {
+      try {
+        const res = await fetch("/api/tasks");
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        const list = (data.tasks || data.data || data || []).slice(0, 5);
+        if (!list.length) { tasksEl.innerHTML = '<div class="empty">还没有任务，上面输入框开始第一个吧。</div>'; return; }
+        tasksEl.innerHTML = list.map(t => `
+          <div class="task-row">
+            <div>
+              <div class="t-title">${(t.title || t.message || t.name || "未命名任务")}</div>
+              <div class="t-meta">${(t.updated_at || t.created_at || "")}</div>
+            </div>
+            ${badge(t.status)}
+          </div>`).join("");
+      } catch (err) {
+        tasksEl.innerHTML = '<div class="empty">最近任务暂不可用（服务未连接）。</div>';
+      }
+    }
+    loadTasks();
+
+    // 注册 Service Worker（PWA 离线/可添加到主屏幕）
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    }
+  </script>
+</body>
+</html>
